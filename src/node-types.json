@@ -216,6 +216,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "attributed_statement",
+        "named": true
+      },
+      {
         "type": "autoreleasepool_statement",
         "named": true
       },
@@ -1259,6 +1263,16 @@
           }
         ]
       },
+      "generics": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generics_list",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -1302,6 +1316,10 @@
         },
         {
           "type": "property_declaration",
+          "named": true
+        },
+        {
+          "type": "type_definition",
           "named": true
         }
       ]
@@ -1417,6 +1435,16 @@
     "type": "class_interface",
     "named": true,
     "fields": {
+      "generics": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generics_list",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -1486,6 +1514,10 @@
         },
         {
           "type": "public",
+          "named": true
+        },
+        {
+          "type": "type_definition",
           "named": true
         }
       ]
@@ -1566,10 +1598,6 @@
         },
         {
           "type": "_type_specifier",
-          "named": true
-        },
-        {
-          "type": "attributed_statement",
           "named": true
         },
         {
@@ -1781,10 +1809,6 @@
         },
         {
           "type": "_type_specifier",
-          "named": true
-        },
-        {
-          "type": "attributed_statement",
           "named": true
         },
         {
@@ -2280,12 +2304,26 @@
     "type": "for_statement",
     "named": true,
     "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_statement",
+            "named": true
+          }
+        ]
+      },
       "condition": {
         "multiple": false,
         "required": false,
         "types": [
           {
             "type": "_expression",
+            "named": true
+          },
+          {
+            "type": "comma_expression",
             "named": true
           }
         ]
@@ -2322,16 +2360,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "_statement",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -2439,6 +2467,21 @@
         },
         {
           "type": "type_qualifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "generics_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -2908,7 +2951,7 @@
             "named": true
           },
           {
-            "type": "parameter_declaration",
+            "type": "ns_macro",
             "named": true
           }
         ]
@@ -2986,7 +3029,7 @@
             "named": true
           },
           {
-            "type": "parameter_declaration",
+            "type": "ns_macro",
             "named": true
           }
         ]
@@ -3083,6 +3126,78 @@
   },
   {
     "type": "ms_unaligned_ptr_modifier",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "ns_enum",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "enumerator_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "argument_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ns_macro",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "argument_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ns_options",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "enumerator_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "argument_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nullable",
     "named": true,
     "fields": {}
   },
@@ -3443,10 +3558,6 @@
           "named": true
         },
         {
-          "type": "attributed_statement",
-          "named": true
-        },
-        {
           "type": "category_implementation",
           "named": true
         },
@@ -3547,10 +3658,6 @@
         },
         {
           "type": "_type_specifier",
-          "named": true
-        },
-        {
-          "type": "attributed_statement",
           "named": true
         },
         {
@@ -3746,10 +3853,6 @@
           "named": true
         },
         {
-          "type": "attributed_statement",
-          "named": true
-        },
-        {
           "type": "category_implementation",
           "named": true
         },
@@ -3875,10 +3978,6 @@
         },
         {
           "type": "_type_specifier",
-          "named": true
-        },
-        {
-          "type": "attributed_statement",
           "named": true
         },
         {
@@ -4077,6 +4176,10 @@
       "required": false,
       "types": [
         {
+          "type": "_expression",
+          "named": true
+        },
+        {
           "type": "assign",
           "named": true
         },
@@ -4090,6 +4193,10 @@
         },
         {
           "type": "nonatomic",
+          "named": true
+        },
+        {
+          "type": "nullable",
           "named": true
         },
         {
@@ -4166,6 +4273,10 @@
         },
         {
           "type": "property_declaration",
+          "named": true
+        },
+        {
+          "type": "type_definition",
           "named": true
         }
       ]
@@ -4591,10 +4702,6 @@
           "named": true
         },
         {
-          "type": "attributed_statement",
-          "named": true
-        },
-        {
           "type": "category_implementation",
           "named": true
         },
@@ -4683,7 +4790,7 @@
     "fields": {
       "declarator": {
         "multiple": true,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "_type_declarator",
@@ -4693,7 +4800,7 @@
       },
       "type": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "_type_specifier",
@@ -4706,6 +4813,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "ns_enum",
+          "named": true
+        },
+        {
+          "type": "ns_options",
+          "named": true
+        },
         {
           "type": "type_qualifier",
           "named": true
@@ -5176,6 +5291,18 @@
     "named": false
   },
   {
+    "type": "API_AVAILABLE",
+    "named": false
+  },
+  {
+    "type": "API_DEPRECATED",
+    "named": false
+  },
+  {
+    "type": "API_DEPRECATED_WITH_REPLACEMENT",
+    "named": false
+  },
+  {
     "type": "L\"",
     "named": false
   },
@@ -5189,6 +5316,30 @@
   },
   {
     "type": "NS_ASSUME_NONNULL_END",
+    "named": false
+  },
+  {
+    "type": "NS_DESIGNATED_INITIALIZER",
+    "named": false
+  },
+  {
+    "type": "NS_ENUM",
+    "named": false
+  },
+  {
+    "type": "NS_NOESCAPE",
+    "named": false
+  },
+  {
+    "type": "NS_OPTIONS",
+    "named": false
+  },
+  {
+    "type": "NS_REQUIRES_NIL_TERMINATION",
+    "named": false
+  },
+  {
+    "type": "NS_SWIFT_UNAVAILABLE",
     "named": false
   },
   {
@@ -5269,6 +5420,10 @@
   },
   {
     "type": "__clrcall",
+    "named": false
+  },
+  {
+    "type": "__covariant",
     "named": false
   },
   {
@@ -5490,6 +5645,10 @@
   {
     "type": "null",
     "named": true
+  },
+  {
+    "type": "nullable",
+    "named": false
   },
   {
     "type": "number_literal",

@@ -28,10 +28,10 @@ Class interface: Superclass
 
 
 ==================
-Class interface: Protocol reference list
+Class interface: Superclass With Protocols
 ==================
 
-@interface ClassName<Protocol1, Protocol2>
+@interface ClassName: SuperclassName<Protocol1, Protocol2>
 @end
 
 ---
@@ -39,7 +39,25 @@ Class interface: Protocol reference list
 (translation_unit
   (class_interface
     name: (identifier)
+    superclass: (identifier)
     protocols: (protocol_reference_list
+      (identifier)
+      (identifier))))
+
+
+==================
+Class interface: lightweight generics
+==================
+
+@interface ClassName<Type1, Type2>
+@end
+
+---
+
+(translation_unit
+  (class_interface
+    name: (identifier)
+    generics: (generics_list
       (identifier)
       (identifier))))
 
@@ -92,7 +110,7 @@ Method declaration: keyword selector
 ==================
 
 @interface ClassName
-+ (tr)k1: (t1)a1 : (t2)a2 k2: a3;
++ (tr)k1:(t1)a1 k2:(t1)a2;
 @end
 
 ---
@@ -111,13 +129,69 @@ Method declaration: keyword selector
               type: (type_identifier))
           name: (identifier))
         (keyword_declarator
+          keyword: (identifier)
           type: (type_descriptor
               type: (type_identifier))
-          name: (identifier))
-        (keyword_declarator
-          keyword: (identifier)
           name: (identifier))))))
 
+==================
+Method declaration: keyword selector 2
+==================
+
+@interface ClassName
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+@end
+
+---
+
+(translation_unit
+  (class_interface
+    name: (identifier)
+    (method_declaration
+      scope: (instance_scope)
+      return_type: (type_descriptor
+        type: (type_identifier))
+      selector: (identifier)
+      selector: (ns_macro))))
+
+==================
+Method declaration: keyword selector 3
+==================
+
+@interface ClassName
+- (instancetype)k API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0)) NS_SWIFT_UNAVAILABLE("Use initializer instead");
+@end
+
+---
+
+(translation_unit
+  (class_interface
+    name: (identifier)
+    (method_declaration
+      scope: (instance_scope)
+      return_type: (type_descriptor
+        type: (type_identifier))
+      selector: (identifier)
+      selector: (ns_macro
+        (argument_list
+          (call_expression
+            function: (identifier)
+            arguments: (argument_list
+              (number_literal)))
+          (call_expression
+            function: (identifier)
+            arguments: (argument_list
+              (number_literal)))
+          (call_expression
+            function: (identifier)
+            arguments: (argument_list
+              (number_literal)))
+          (call_expression
+            function: (identifier)
+            arguments: (argument_list
+              (number_literal))))
+        (argument_list
+          (string_literal))))))
 
 ==================
 Method declaration: unary selector
@@ -488,3 +562,61 @@ function([db A:a block:^int(Type *type) {
                 body: (compound_statement
                   (return_statement
                     (number_literal)))))))))))
+
+==================
+typedef in @interface
+==================
+
+@interface ClassName
++ (tr)k1:(t1)a1 k2:(t1)a2;
+typedef NS_OPTIONS(NSUInteger, NSBinarySearchingOptions) {
+	NSBinarySearchingFirstEqual = (1UL << 8),
+	NSBinarySearchingLastEqual = (1UL << 9),
+	NSBinarySearchingInsertionIndex = (1UL << 10),
+};
+@end
+
+---
+
+(translation_unit
+      (class_interface
+    name: (identifier)
+    (method_declaration
+      scope: (class_scope)
+      return_type: (type_descriptor
+        type: (type_identifier))
+      selector: (keyword_selector
+        (keyword_declarator
+          keyword: (identifier)
+          type: (type_descriptor
+            type: (type_identifier))
+          name: (identifier))
+        (keyword_declarator
+          keyword: (identifier)
+          type: (type_descriptor
+            type: (type_identifier))
+          name: (identifier))))
+    (type_definition
+      (ns_options
+        (argument_list
+          (identifier)
+          (identifier))
+        body: (enumerator_list
+          (enumerator
+            name: (identifier)
+            value: (parenthesized_expression
+              (binary_expression
+                left: (number_literal)
+                right: (number_literal))))
+          (enumerator
+            name: (identifier)
+            value: (parenthesized_expression
+              (binary_expression
+                left: (number_literal)
+                right: (number_literal))))
+          (enumerator
+            name: (identifier)
+            value: (parenthesized_expression
+              (binary_expression
+                left: (number_literal)
+                right: (number_literal)))))))))
