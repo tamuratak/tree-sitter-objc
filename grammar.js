@@ -34,6 +34,12 @@ module.exports = grammar(C, {
       ':', field('superclass', $.identifier)
     ),
 
+    _generics: $ => field('generics', $.generics_list),
+
+    generics_list: $ => seq(
+      '<', optional('__covariant'), commaSep1($.identifier), '>'
+    ),
+  
     _import: $ => choice(
       $.preproc_import,
       $.module_import
@@ -58,15 +64,16 @@ module.exports = grammar(C, {
     // Declarations
 
     class_interface: $ => seq(
-      '@interface', $._name, optional($._superclass_reference),
-      optional($._protocols),
+      '@interface', $._name, optional($._generics),
+      optional(seq($._superclass_reference, optional($._protocols))),
       optional($._instance_variables),
       optional($._interface_declaration_list),
       '@end'
     ),
 
     category_interface: $ => seq(
-      '@interface', $._name, '(', field('category', optional($.identifier)), ')',
+      '@interface', $._name, optional($._generics),
+      '(', field('category', optional($.identifier)), ')',
       optional($._protocols),
       optional($._interface_declaration_list),
       '@end'
@@ -122,6 +129,7 @@ module.exports = grammar(C, {
       $.property_declaration,
       $.preproc_call,
       $.demarcation,
+      $.type_definition,
     ),
 
     method_declaration: $ => seq(
@@ -146,6 +154,7 @@ module.exports = grammar(C, {
       field('type', $._type_identifier),
       optional('*'),
       field('name', $.identifier),
+      commaSep($._expression),
       ';'
     ),
 
@@ -163,7 +172,8 @@ module.exports = grammar(C, {
       $.copy,
       $.assign,
       $.retain,
-      $.nonatomic
+      $.nonatomic,
+      $.nullable
     ),
 
     getter: $ => seq(
@@ -190,6 +200,8 @@ module.exports = grammar(C, {
 
     nonatomic: $ => 'nonatomic',
 
+    nullable: $ => 'nullable',
+
     // Add support for Blocks: Declaration
     _declarator: ($, original) => choice(
       original,
@@ -203,6 +215,7 @@ module.exports = grammar(C, {
 
     block_declarator: $ => seq(
       '(',
+      optional('NS_NOESCAPE'),
       '^',
       field('declarator', optional($.identifier)),
       ')',
@@ -212,6 +225,7 @@ module.exports = grammar(C, {
 
     abstract_block_declarator: $ => seq(
       '(',
+      optional('NS_NOESCAPE'),
       '^',
       field('declarator', optional($._abstract_declarator)),
       ')',
@@ -290,11 +304,13 @@ module.exports = grammar(C, {
     // Selectors
 
     _method_selector: $ => choice(
-      $._unary_selector,
+      seq(
+        $._unary_selector,
+        optional($.ns_macro)),
       seq(
         $.keyword_selector,
-        optional(commaSep1($.parameter_declaration)),
-        optional(seq(',', '...'))),
+        optional(seq(',', '...')),
+        optional($.ns_macro))
     ),
 
     _unary_selector: $ => $.identifier,
@@ -348,6 +364,7 @@ module.exports = grammar(C, {
       '_Nonnull',
       '_Nullable',
       '_Null_unspecified',
+      'nullable',
       $.protocol_qualifier
     ),
 
@@ -525,6 +542,35 @@ module.exports = grammar(C, {
 
     available_expression: $ => seq(
       '@available', '(', commaSep($.system_version), ')'
+    ),
+
+    ns_macro: $ => repeat1(choice(
+      'NS_REQUIRES_NIL_TERMINATION',
+      'NS_DESIGNATED_INITIALIZER',
+      seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
+      seq('API_AVAILABLE', $.argument_list),
+      seq('API_DEPRECATED', $.argument_list),
+      seq('API_DEPRECATED_WITH_REPLACEMENT', $.argument_list),
+    )),
+
+    ns_options: $ => seq(
+      'typedef',
+      'NS_OPTIONS', $.argument_list,
+      field('body', $.enumerator_list),
+      ';'
+    ),
+
+    ns_enum: $ => seq(
+      'typedef',
+      'NS_ENUM', $.argument_list,
+      field('body', $.enumerator_list),
+      ';'
+    ),
+
+    type_definition: ($, original) => choice(
+      original,
+      $.ns_options,
+      $.ns_enum,
     ),
 
   }
