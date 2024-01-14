@@ -5,7 +5,9 @@ module.exports = grammar(C, {
   name: 'objc',
 
   conflicts: ($, original) => original.concat([
-    [$._expression, $.protocol_type_specifier],
+    [$._expression_not_binary, $.protocol_type_specifier],
+    [$._expression_not_binary, $.concatenated_string],
+    [$.concatenated_string],
     [$.keyword_selector],
     [$.struct_specifier],
     [$.union_specifier],
@@ -33,12 +35,6 @@ module.exports = grammar(C, {
     _superclass_reference: $ => seq(
       ':', field('superclass', $.identifier)
     ),
-
-    _generics: $ => field('generics', $.generics_list),
-
-    generics_list: $ => seq(
-      '<', optional('__covariant'), commaSep1($.identifier), '>'
-    ),
   
     _import: $ => choice(
       $.preproc_import,
@@ -64,7 +60,8 @@ module.exports = grammar(C, {
     // Declarations
 
     class_interface: $ => seq(
-      '@interface', $._name, optional($._generics),
+      optional($.ns_macro),
+      '@interface', $._name, optional($._protocols),
       optional(seq($._superclass_reference, optional($._protocols))),
       optional($._instance_variables),
       optional($._interface_declaration_list),
@@ -72,7 +69,8 @@ module.exports = grammar(C, {
     ),
 
     category_interface: $ => seq(
-      '@interface', $._name, optional($._generics),
+      optional($.ns_macro),
+      '@interface', $._name, optional($._protocols),
       '(', field('category', optional($.identifier)), ')',
       optional($._protocols),
       optional($._interface_declaration_list),
@@ -80,6 +78,7 @@ module.exports = grammar(C, {
     ),
 
     protocol_declaration: $ => seq(
+      optional($.ns_macro),
       '@protocol', $._name,
       optional($._protocols),
       optional($._interface_declaration_list),
@@ -87,17 +86,29 @@ module.exports = grammar(C, {
     ),
 
     protocol_declaration_list: $ => seq(
-      '@protocol', '<', commaSep1(seq($.identifier, optional('*'))), '>', ';'
+      '@protocol', commaSep1($.identifier), ';'
     ),
 
     class_declaration_list: $ => seq(
-      '@class', commaSep1($.identifier), ';'
+      '@class',
+      commaSep1(seq(
+        $.identifier,
+        optional($.protocol_reference_list))),
+      ';'
     ),
 
     _protocols: $ => field('protocols', $.protocol_reference_list),
 
     protocol_reference_list: $ => seq(
-      '<', commaSep1(seq($.identifier, optional('*'))), '>'
+      '<',
+      optional('__kindof'),
+      optional(choice('__covariant', '__contravariant')),
+      commaSep1(seq(
+        choice(
+          $.identifier,
+          $.protocol_type_specifier),
+        optional('*'))),
+      '>'
     ),
 
     _instance_variables: $ => seq(
@@ -130,6 +141,12 @@ module.exports = grammar(C, {
       $.preproc_call,
       $.demarcation,
       $.type_definition,
+      $.opreq
+    ),
+
+    opreq: $ => choice(
+      '@optional',
+      '@required',
     ),
 
     method_declaration: $ => seq(
@@ -151,10 +168,10 @@ module.exports = grammar(C, {
     property_declaration: $ => seq(
       '@property',
       optional($._property_attribute_list),
-      field('type', $._type_identifier),
+      field('type', $.type_descriptor),
       optional('*'),
       field('name', $.identifier),
-      commaSep($._expression),
+      optional($.ns_macro),
       ';'
     ),
 
@@ -170,6 +187,7 @@ module.exports = grammar(C, {
       $.strong,
       $.weak,
       $.copy,
+      $.class,
       $.assign,
       $.retain,
       $.nonatomic,
@@ -194,6 +212,8 @@ module.exports = grammar(C, {
 
     copy: $ => 'copy',
 
+    class: _ => 'class',
+
     assign: $ => 'assign',
 
     retain: $ => 'retain',
@@ -213,9 +233,32 @@ module.exports = grammar(C, {
       $.abstract_block_declarator
     ),
 
+    _type_declarator: ($, original) => choice(
+      original,
+      alias($.block_parenthesized_type_declarator, $.block_parenthesized_declarator),
+    ),
+
+    _block_qualifiers: _ => repeat1(choice('NS_NOESCAPE', 'NS_SWIFT_SENDABLE')),
+
+    block_parenthesized_type_declarator: $ => prec.dynamic(C.PREC.PAREN_DECLARATOR, seq(
+      '(',
+      optional($._block_qualifiers),
+      '^',
+      field('declarator', $._declarator),
+      ')',
+    )),
+
+    block_abstract_parenthesized_declarator: $ => prec(1, seq(
+      '(',
+      optional($._block_qualifiers),
+      '^',
+      $._abstract_declarator,
+      ')',
+    )),
+
     block_declarator: $ => seq(
       '(',
-      optional('NS_NOESCAPE'),
+      optional($._block_qualifiers),
       '^',
       field('declarator', optional($.identifier)),
       ')',
@@ -225,7 +268,7 @@ module.exports = grammar(C, {
 
     abstract_block_declarator: $ => seq(
       '(',
-      optional('NS_NOESCAPE'),
+      optional($._block_qualifiers),
       '^',
       field('declarator', optional($._abstract_declarator)),
       ')',
@@ -244,6 +287,12 @@ module.exports = grammar(C, {
     ),
 
     _non_case_statement: ($, original) => choice(
+      original,
+      $.for_in_statement,
+      $.autoreleasepool_statement,
+    ),
+
+    _top_level_statement: ($, original) => choice(
       original,
       $.for_in_statement,
       $.autoreleasepool_statement,
@@ -363,6 +412,7 @@ module.exports = grammar(C, {
       '__null_unspecified',
       '_Nonnull',
       '_Nullable',
+      '_Nullable_result',
       '_Null_unspecified',
       'nullable',
       $.protocol_qualifier
@@ -545,32 +595,76 @@ module.exports = grammar(C, {
     ),
 
     ns_macro: $ => repeat1(choice(
-      'NS_REQUIRES_NIL_TERMINATION',
       'NS_DESIGNATED_INITIALIZER',
+      'NS_REQUIRES_NIL_TERMINATION',
+      'NS_REFINED_FOR_SWIFT',
+      'NS_SWIFT_SENDABLE',
+      'NS_UNAVAILABLE',
+      seq('NS_FORMAT_FUNCTION', $.argument_list),
+      seq('NS_SWIFT_ASYNC_NAME', $._ns_macro_paren),
+      seq('NS_SWIFT_NAME', $._ns_macro_paren),
       seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
       seq('API_AVAILABLE', $.argument_list),
+      seq('API_UNAVAILABLE', $.argument_list),
       seq('API_DEPRECATED', $.argument_list),
       seq('API_DEPRECATED_WITH_REPLACEMENT', $.argument_list),
     )),
 
+    _ns_macro_paren: $ => seq(
+      '(',
+      repeat(
+        choice(
+          $.string_literal,
+          /[^()]+/,
+          $._ns_macro_paren
+        )
+      ),
+      ')'
+    ),
+
     ns_options: $ => seq(
       'typedef',
       'NS_OPTIONS', $.argument_list,
-      field('body', $.enumerator_list),
+      field('body', $.ns_macro_enumerator_list),
+      optional($.ns_macro),
       ';'
     ),
 
     ns_enum: $ => seq(
-      'typedef',
+      optional('typedef'),
       'NS_ENUM', $.argument_list,
-      field('body', $.enumerator_list),
+      field('body', $.ns_macro_enumerator_list),
+      optional($.ns_macro),
       ';'
+    ),
+
+    ns_macro_enumerator_list: $ => seq(
+      '{',
+      repeat(choice(
+        seq($.ns_macro_enumerator, optional(',')),
+        $.preproc_call
+      )),
+      '}',
+    ),
+
+    ns_macro_enumerator: $ => seq(
+        field('name', $.identifier),
+        optional($.ns_macro),
+        optional(seq('=', field('value', $._expression))),
     ),
 
     type_definition: ($, original) => choice(
       original,
       $.ns_options,
       $.ns_enum,
+    ),
+
+    declaration: $ => seq(
+      optional('FOUNDATION_EXPORT'),
+      $._declaration_specifiers,
+      $._declaration_declarator,
+      optional($.ns_macro),
+      ';',
     ),
 
   }
