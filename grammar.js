@@ -5,7 +5,9 @@ module.exports = grammar(C, {
   name: 'objc',
 
   conflicts: ($, original) => original.concat([
-    [$._expression, $.protocol_type_specifier],
+    [$._expression_not_binary, $.protocol_type_specifier],
+    [$._expression_not_binary, $.concatenated_string],
+    [$.concatenated_string],
     [$.keyword_selector],
     [$.struct_specifier],
     [$.union_specifier],
@@ -244,6 +246,12 @@ module.exports = grammar(C, {
     ),
 
     _non_case_statement: ($, original) => choice(
+      original,
+      $.for_in_statement,
+      $.autoreleasepool_statement,
+    ),
+
+    _top_level_statement: ($, original) => choice(
       original,
       $.for_in_statement,
       $.autoreleasepool_statement,

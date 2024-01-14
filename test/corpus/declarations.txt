@@ -191,7 +191,8 @@ Method declaration: keyword selector 3
             arguments: (argument_list
               (number_literal))))
         (argument_list
-          (string_literal))))))
+          (string_literal
+            (string_content)))))))
 
 ==================
 Method declaration: unary selector
