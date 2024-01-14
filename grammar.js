@@ -5,7 +5,9 @@ module.exports = grammar(C, {
   name: 'objc',
 
   conflicts: ($, original) => original.concat([
-    [$._expression, $.protocol_type_specifier],
+    [$._expression_not_binary, $.protocol_type_specifier],
+    [$._expression_not_binary, $.concatenated_string],
+    [$.concatenated_string],
     [$.keyword_selector],
     [$.struct_specifier],
     [$.union_specifier],
@@ -33,12 +35,6 @@ module.exports = grammar(C, {
     _superclass_reference: $ => seq(
       ':', field('superclass', $.identifier)
     ),
-
-    _generics: $ => field('generics', $.generics_list),
-
-    generics_list: $ => seq(
-      '<', optional('__covariant'), commaSep1($.identifier), '>'
-    ),
   
     _import: $ => choice(
       $.preproc_import,
@@ -64,7 +60,7 @@ module.exports = grammar(C, {
     // Declarations
 
     class_interface: $ => seq(
-      '@interface', $._name, optional($._generics),
+      '@interface', $._name, optional($._protocols),
       optional(seq($._superclass_reference, optional($._protocols))),
       optional($._instance_variables),
       optional($._interface_declaration_list),
@@ -72,7 +68,7 @@ module.exports = grammar(C, {
     ),
 
     category_interface: $ => seq(
-      '@interface', $._name, optional($._generics),
+      '@interface', $._name, optional($._protocols),
       '(', field('category', optional($.identifier)), ')',
       optional($._protocols),
       optional($._interface_declaration_list),
@@ -87,17 +83,29 @@ module.exports = grammar(C, {
     ),
 
     protocol_declaration_list: $ => seq(
-      '@protocol', '<', commaSep1(seq($.identifier, optional('*'))), '>', ';'
+      '@protocol', commaSep1($.identifier), ';'
     ),
 
     class_declaration_list: $ => seq(
-      '@class', commaSep1($.identifier), ';'
+      '@class',
+      commaSep1(seq(
+        $.identifier,
+        optional($.protocol_reference_list))),
+      ';'
     ),
 
     _protocols: $ => field('protocols', $.protocol_reference_list),
 
     protocol_reference_list: $ => seq(
-      '<', commaSep1(seq($.identifier, optional('*'))), '>'
+      '<',
+      optional('__kindof'),
+      optional(choice('__covariant', '__contravariant')),
+      commaSep1(seq(
+        choice(
+          $.identifier,
+          $.protocol_type_specifier),
+        optional('*'))),
+      '>'
     ),
 
     _instance_variables: $ => seq(
@@ -170,6 +178,7 @@ module.exports = grammar(C, {
       $.strong,
       $.weak,
       $.copy,
+      $.class,
       $.assign,
       $.retain,
       $.nonatomic,
@@ -194,6 +203,8 @@ module.exports = grammar(C, {
 
     copy: $ => 'copy',
 
+    class: _ => 'class',
+
     assign: $ => 'assign',
 
     retain: $ => 'retain',
@@ -212,6 +223,27 @@ module.exports = grammar(C, {
       original,
       $.abstract_block_declarator
     ),
+
+    _type_declarator: ($, original) => choice(
+      original,
+      alias($.block_parenthesized_type_declarator, $.block_parenthesized_declarator),
+    ),
+
+    block_parenthesized_type_declarator: $ => prec.dynamic(C.PREC.PAREN_DECLARATOR, seq(
+      '(',
+      optional('NS_NOESCAPE'),
+      '^',
+      field('declarator', $._declarator),
+      ')',
+    )),
+
+    block_abstract_parenthesized_declarator: $ => prec(1, seq(
+      '(',
+      optional('NS_NOESCAPE'),
+      '^',
+      $._abstract_declarator,
+      ')',
+    )),
 
     block_declarator: $ => seq(
       '(',
@@ -244,6 +276,12 @@ module.exports = grammar(C, {
     ),
 
     _non_case_statement: ($, original) => choice(
+      original,
+      $.for_in_statement,
+      $.autoreleasepool_statement,
+    ),
+
+    _top_level_statement: ($, original) => choice(
       original,
       $.for_in_statement,
       $.autoreleasepool_statement,
@@ -545,8 +583,9 @@ module.exports = grammar(C, {
     ),
 
     ns_macro: $ => repeat1(choice(
-      'NS_REQUIRES_NIL_TERMINATION',
       'NS_DESIGNATED_INITIALIZER',
+      'NS_REQUIRES_NIL_TERMINATION',
+      'NS_REFINED_FOR_SWIFT',
       seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
       seq('API_AVAILABLE', $.argument_list),
       seq('API_DEPRECATED', $.argument_list),
@@ -571,6 +610,14 @@ module.exports = grammar(C, {
       original,
       $.ns_options,
       $.ns_enum,
+    ),
+
+    declaration: $ => seq(
+      optional('FOUNDATION_EXPORT'),
+      $._declaration_specifiers,
+      $._declaration_declarator,
+      optional($.ns_macro),
+      ';',
     ),
 
   }

@@ -1,40 +1,38 @@
-==================
+================================================================================
 Class interface: Empty
-==================
+================================================================================
 
 @interface ClassName
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
     name: (identifier)))
 
-
-==================
+================================================================================
 Class interface: Superclass
-==================
+================================================================================
 
 @interface ClassName: SuperclassName
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
     name: (identifier)
     superclass: (identifier)))
 
-
-==================
+================================================================================
 Class interface: Superclass With Protocols
-==================
+================================================================================
 
 @interface ClassName: SuperclassName<Protocol1, Protocol2>
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -44,27 +42,25 @@ Class interface: Superclass With Protocols
       (identifier)
       (identifier))))
 
-
-==================
+================================================================================
 Class interface: lightweight generics
-==================
+================================================================================
 
 @interface ClassName<Type1, Type2>
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
     name: (identifier)
-    generics: (generics_list
+    protocols: (protocol_reference_list
       (identifier)
       (identifier))))
 
-
-==================
+================================================================================
 Class interface: Instance Variables
-==================
+================================================================================
 
 @interface ClassName {
   type1 iv1;
@@ -72,7 +68,7 @@ Class interface: Instance Variables
 }
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -84,16 +80,15 @@ Class interface: Instance Variables
       type: (type_identifier)
       declarator: (field_identifier))))
 
-
-==================
+================================================================================
 Class interface: Property
-==================
+================================================================================
 
 @interface ClassName
 @property (readwrite, copy) float value;
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -104,16 +99,15 @@ Class interface: Property
       type: (type_identifier)
       name: (identifier))))
 
-
-==================
+================================================================================
 Method declaration: keyword selector
-==================
+================================================================================
 
 @interface ClassName
 + (tr)k1:(t1)a1 k2:(t1)a2;
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -126,23 +120,23 @@ Method declaration: keyword selector
         (keyword_declarator
           keyword: (identifier)
           type: (type_descriptor
-              type: (type_identifier))
+            type: (type_identifier))
           name: (identifier))
         (keyword_declarator
           keyword: (identifier)
           type: (type_descriptor
-              type: (type_identifier))
+            type: (type_identifier))
           name: (identifier))))))
 
-==================
+================================================================================
 Method declaration: keyword selector 2
-==================
+================================================================================
 
 @interface ClassName
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -154,15 +148,15 @@ Method declaration: keyword selector 2
       selector: (identifier)
       selector: (ns_macro))))
 
-==================
+================================================================================
 Method declaration: keyword selector 3
-==================
+================================================================================
 
 @interface ClassName
 - (instancetype)k API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0)) NS_SWIFT_UNAVAILABLE("Use initializer instead");
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -191,17 +185,18 @@ Method declaration: keyword selector 3
             arguments: (argument_list
               (number_literal))))
         (argument_list
-          (string_literal))))))
+          (string_literal
+            (string_content)))))))
 
-==================
+================================================================================
 Method declaration: unary selector
-==================
+================================================================================
 
 @interface ClassName
 - (rt) sel;
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -212,45 +207,42 @@ Method declaration: unary selector
         type: (type_identifier))
       selector: (identifier))))
 
-
-==================
+================================================================================
 Class implementation: Empty
-==================
+================================================================================
 
 @implementation ClassName
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_implementation
     name: (identifier)))
 
-
-==================
+================================================================================
 Class implementation: Superclass
-==================
+================================================================================
 
 @implementation ClassName: SuperclassName
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_implementation
     name: (identifier)
     superclass: (identifier)))
 
-
-==================
+================================================================================
 Class implementation: Synthesize property
-==================
+================================================================================
 
 @implementation ClassName
 @synthesize p1, p2=iv;
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_implementation
@@ -262,17 +254,16 @@ Class implementation: Synthesize property
         property: (identifier)
         instance_variable: (identifier)))))
 
-
-==================
+================================================================================
 Class implementation: Instance variable
-==================
+================================================================================
 
 @implementation ClassName {
   type1 iv1;
 }
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_implementation
@@ -281,10 +272,9 @@ Class implementation: Instance variable
       type: (type_identifier)
       declarator: (field_identifier))))
 
-
-==================
+================================================================================
 Instance variables: visibility specification
-==================
+================================================================================
 
 @implementation ClassName {
   @public
@@ -292,7 +282,7 @@ Instance variables: visibility specification
 }
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_implementation
@@ -302,17 +292,16 @@ Instance variables: visibility specification
       type: (type_identifier)
       declarator: (field_identifier))))
 
-
-==================
+================================================================================
 Method definition: keyword selector
-==================
+================================================================================
 
 @implementation ClassName
 + (tr)k1: (in t1)a1 : (t2)a2 k2: a3 {
 }
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_implementation
@@ -325,29 +314,29 @@ Method definition: keyword selector
         (keyword_declarator
           keyword: (identifier)
           type: (type_descriptor
-              (type_qualifier (protocol_qualifier))
-              type: (type_identifier))
+            (type_qualifier
+              (protocol_qualifier))
+            type: (type_identifier))
           name: (identifier))
         (keyword_declarator
           type: (type_descriptor
-              type: (type_identifier))
+            type: (type_identifier))
           name: (identifier))
         (keyword_declarator
           keyword: (identifier)
           name: (identifier)))
       body: (compound_statement))))
 
-
-==================
+================================================================================
 Method definition: unary selector
-==================
+================================================================================
 
 @implementation ClassName
 - (rt) sel {
 }
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_implementation
@@ -359,30 +348,28 @@ Method definition: unary selector
       selector: (identifier)
       body: (compound_statement))))
 
-
-==================
+================================================================================
 Category interface: Empty
-==================
+================================================================================
 
 @interface ClassName(Category)
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (category_interface
     name: (identifier)
     category: (identifier)))
 
-
-==================
+================================================================================
 Category interface: Protocol reference list
-==================
+================================================================================
 
 @interface ClassName(Category)<P1, P2>
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (category_interface
@@ -392,30 +379,28 @@ Category interface: Protocol reference list
       (identifier)
       (identifier))))
 
-
-==================
+================================================================================
 Category implementation
-==================
+================================================================================
 
 @implementation ClassName(Category)
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (category_implementation
     name: (identifier)
     category: (identifier)))
 
-
-==================
+================================================================================
 Protocol declaration
-==================
+================================================================================
 
 @protocol Protocol<P1, P2>
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (protocol_declaration
@@ -424,44 +409,46 @@ Protocol declaration
       (identifier)
       (identifier))))
 
-
-==================
+================================================================================
 Protocol declaration list
-==================
+================================================================================
 
-@protocol <P1, P2>;
+@protocol P1, P2;
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (protocol_declaration_list
     (identifier)
     (identifier)))
 
-
-==================
+================================================================================
 Class declaration list
-==================
+================================================================================
 
 @class C1, C2;
+@class NSArray<ObjectType>;
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_declaration_list
     (identifier)
-    (identifier)))
+    (identifier))
+  (class_declaration_list
+    (identifier)
+    (protocol_reference_list
+      (identifier))))
 
-
-==================
+================================================================================
 Blocks: Pass Blocks as argument in method
-==================
+================================================================================
 
 @interface ClassName
 - (void)method:(type1)argument1 secondValue:(void(^)(void))block;
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (class_interface
@@ -486,14 +473,13 @@ Blocks: Pass Blocks as argument in method
                   type: (primitive_type)))))
           name: (identifier))))))
 
-
-==================
+================================================================================
 Blocks: Declare Blocks
-==================
+================================================================================
 
 void ( ^ blocksName ) ( void );
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (declaration
@@ -504,16 +490,15 @@ void ( ^ blocksName ) ( void );
         (parameter_declaration
           type: (primitive_type))))))
 
-
-==================
+================================================================================
 Blocks: Blocks Literal
-==================
+================================================================================
 
 void (^testBlock)(void) = ^{
   return;
 };
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (declaration
@@ -528,16 +513,15 @@ void (^testBlock)(void) = ^{
         body: (compound_statement
           (return_statement))))))
 
-
-==================
+================================================================================
 Blocks: Pass Blocks as argument in message selector
-==================
+================================================================================
 
 function([db A:a block:^int(Type *type) {
   return 0;
 }]);
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (expression_statement
@@ -563,9 +547,9 @@ function([db A:a block:^int(Type *type) {
                   (return_statement
                     (number_literal)))))))))))
 
-==================
+================================================================================
 typedef in @interface
-==================
+================================================================================
 
 @interface ClassName
 + (tr)k1:(t1)a1 k2:(t1)a2;
@@ -576,10 +560,10 @@ typedef NS_OPTIONS(NSUInteger, NSBinarySearchingOptions) {
 };
 @end
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
-      (class_interface
+  (class_interface
     name: (identifier)
     (method_declaration
       scope: (class_scope)
@@ -620,3 +604,60 @@ typedef NS_OPTIONS(NSUInteger, NSBinarySearchingOptions) {
               (binary_expression
                 left: (number_literal)
                 right: (number_literal)))))))))
+
+================================================================================
+typedef function pointer
+================================================================================
+
+typedef void (^VNRequestCompletionHandler)(VNRequest *request, NSError * _Nullable error);
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (type_definition
+    type: (primitive_type)
+    declarator: (function_declarator
+      declarator: (block_parenthesized_declarator
+        declarator: (identifier))
+      parameters: (parameter_list
+        (parameter_declaration
+          type: (type_identifier)
+          declarator: (pointer_declarator
+            declarator: (identifier)))
+        (parameter_declaration
+          type: (type_identifier)
+          declarator: (pointer_declarator
+            (type_qualifier)
+            declarator: (identifier)))))))
+
+================================================================================
+FOUNDATION_EXPORT
+================================================================================
+
+FOUNDATION_EXPORT const int64_t NSURLSessionTransferSizeUnknown API_AVAILABLE(macos(10.9), ios(7.0), watchos(2.0), tvos(9.0)); 
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (declaration
+    (type_qualifier)
+    type: (primitive_type)
+    declarator: (identifier)
+    (ns_macro
+      (argument_list
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))))))

@@ -21,8 +21,8 @@ Preprocessor import: string literal
 
 (translation_unit
   (preproc_import
-    path: (string_literal)))
-
+    path: (string_literal
+      (string_content))))
 
 ==================
 Module import
