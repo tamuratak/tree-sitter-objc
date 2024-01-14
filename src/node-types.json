@@ -1357,6 +1357,14 @@
           "named": true
         },
         {
+          "type": "ns_macro",
+          "named": true
+        },
+        {
+          "type": "opreq",
+          "named": true
+        },
+        {
           "type": "preproc_call",
           "named": true
         },
@@ -1542,6 +1550,10 @@
         },
         {
           "type": "ns_macro",
+          "named": true
+        },
+        {
+          "type": "opreq",
           "named": true
         },
         {
@@ -2063,6 +2075,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "ns_macro",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -3383,11 +3405,15 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "argument_list",
+          "named": true
+        },
+        {
+          "type": "ns_macro",
           "named": true
         }
       ]
@@ -3428,11 +3454,15 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "argument_list",
+          "named": true
+        },
+        {
+          "type": "ns_macro",
           "named": true
         }
       ]
@@ -3500,6 +3530,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "opreq",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "parameter_declaration",
@@ -4381,10 +4416,6 @@
       "required": false,
       "types": [
         {
-          "type": "_expression",
-          "named": true
-        },
-        {
           "type": "assign",
           "named": true
         },
@@ -4402,6 +4433,10 @@
         },
         {
           "type": "nonatomic",
+          "named": true
+        },
+        {
+          "type": "ns_macro",
           "named": true
         },
         {
@@ -4474,6 +4509,14 @@
         },
         {
           "type": "method_declaration",
+          "named": true
+        },
+        {
+          "type": "ns_macro",
+          "named": true
+        },
+        {
+          "type": "opreq",
           "named": true
         },
         {
@@ -5572,11 +5615,19 @@
     "named": false
   },
   {
+    "type": "@optional",
+    "named": false
+  },
+  {
     "type": "@property",
     "named": false
   },
   {
     "type": "@protocol",
+    "named": false
+  },
+  {
+    "type": "@required",
     "named": false
   },
   {
@@ -5597,6 +5648,10 @@
   },
   {
     "type": "API_DEPRECATED_WITH_REPLACEMENT",
+    "named": false
+  },
+  {
+    "type": "API_UNAVAILABLE",
     "named": false
   },
   {
@@ -5648,11 +5703,19 @@
     "named": false
   },
   {
+    "type": "NS_SWIFT_NAME",
+    "named": false
+  },
+  {
     "type": "NS_SWIFT_SENDABLE",
     "named": false
   },
   {
     "type": "NS_SWIFT_UNAVAILABLE",
+    "named": false
+  },
+  {
+    "type": "NS_UNAVAILABLE",
     "named": false
   },
   {
@@ -5729,6 +5792,10 @@
   },
   {
     "type": "_Nullable",
+    "named": false
+  },
+  {
+    "type": "_Nullable_result",
     "named": false
   },
   {

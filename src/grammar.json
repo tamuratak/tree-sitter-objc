@@ -3699,6 +3699,10 @@
         },
         {
           "type": "STRING",
+          "value": "_Nullable_result"
+        },
+        {
+          "type": "STRING",
           "value": "_Null_unspecified"
         },
         {
@@ -4475,6 +4479,18 @@
             "type": "SYMBOL",
             "name": "identifier"
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ns_macro"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -8524,6 +8540,18 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ns_macro"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "STRING",
           "value": "@interface"
         },
@@ -8600,6 +8628,18 @@
     "protocol_declaration": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ns_macro"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "STRING",
           "value": "@protocol"
@@ -8974,6 +9014,23 @@
         {
           "type": "SYMBOL",
           "name": "type_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "opreq"
+        }
+      ]
+    },
+    "opreq": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@optional"
+        },
+        {
+          "type": "STRING",
+          "value": "@required"
         }
       ]
     },
@@ -9090,29 +9147,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_expression"
-                },
-                {
-                  "type": "REPEAT",
-                  "content": {
-                    "type": "SEQ",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": ","
-                      },
-                      {
-                        "type": "SYMBOL",
-                        "name": "_expression"
-                      }
-                    ]
-                  }
-                }
-              ]
+              "type": "SYMBOL",
+              "name": "ns_macro"
             },
             {
               "type": "BLANK"
@@ -10721,17 +10757,8 @@
             "value": "NS_SWIFT_SENDABLE"
           },
           {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "NS_SWIFT_UNAVAILABLE"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "argument_list"
-              }
-            ]
+            "type": "STRING",
+            "value": "NS_UNAVAILABLE"
           },
           {
             "type": "SEQ",
@@ -10751,7 +10778,46 @@
             "members": [
               {
                 "type": "STRING",
+                "value": "NS_SWIFT_NAME"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_ns_macro_paren"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "NS_SWIFT_UNAVAILABLE"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "argument_list"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
                 "value": "API_AVAILABLE"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "argument_list"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "API_UNAVAILABLE"
               },
               {
                 "type": "SYMBOL",
@@ -10845,6 +10911,18 @@
           }
         },
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ns_macro"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "STRING",
           "value": ";"
         }
@@ -10872,6 +10950,18 @@
             "type": "SYMBOL",
             "name": "enumerator_list"
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ns_macro"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "STRING",

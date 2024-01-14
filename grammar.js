@@ -69,6 +69,7 @@ module.exports = grammar(C, {
     ),
 
     category_interface: $ => seq(
+      optional($.ns_macro),
       '@interface', $._name, optional($._protocols),
       '(', field('category', optional($.identifier)), ')',
       optional($._protocols),
@@ -77,6 +78,7 @@ module.exports = grammar(C, {
     ),
 
     protocol_declaration: $ => seq(
+      optional($.ns_macro),
       '@protocol', $._name,
       optional($._protocols),
       optional($._interface_declaration_list),
@@ -139,6 +141,12 @@ module.exports = grammar(C, {
       $.preproc_call,
       $.demarcation,
       $.type_definition,
+      $.opreq
+    ),
+
+    opreq: $ => choice(
+      '@optional',
+      '@required',
     ),
 
     method_declaration: $ => seq(
@@ -163,7 +171,7 @@ module.exports = grammar(C, {
       field('type', $._type_identifier),
       optional('*'),
       field('name', $.identifier),
-      commaSep($._expression),
+      optional($.ns_macro),
       ';'
     ),
 
@@ -404,6 +412,7 @@ module.exports = grammar(C, {
       '__null_unspecified',
       '_Nonnull',
       '_Nullable',
+      '_Nullable_result',
       '_Null_unspecified',
       'nullable',
       $.protocol_qualifier
@@ -590,9 +599,12 @@ module.exports = grammar(C, {
       'NS_REQUIRES_NIL_TERMINATION',
       'NS_REFINED_FOR_SWIFT',
       'NS_SWIFT_SENDABLE',
-      seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
+      'NS_UNAVAILABLE',
       seq('NS_SWIFT_ASYNC_NAME', $._ns_macro_paren),
+      seq('NS_SWIFT_NAME', $._ns_macro_paren),
+      seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
       seq('API_AVAILABLE', $.argument_list),
+      seq('API_UNAVAILABLE', $.argument_list),
       seq('API_DEPRECATED', $.argument_list),
       seq('API_DEPRECATED_WITH_REPLACEMENT', $.argument_list),
     )),
@@ -613,6 +625,7 @@ module.exports = grammar(C, {
       'typedef',
       'NS_OPTIONS', $.argument_list,
       field('body', $.enumerator_list),
+      optional($.ns_macro),
       ';'
     ),
 
@@ -620,6 +633,7 @@ module.exports = grammar(C, {
       'typedef',
       'NS_ENUM', $.argument_list,
       field('body', $.enumerator_list),
+      optional($.ns_macro),
       ';'
     ),
 
@@ -635,6 +649,12 @@ module.exports = grammar(C, {
       $._declaration_declarator,
       optional($.ns_macro),
       ';',
+    ),
+
+    enumerator: $ => seq(
+      field('name', $.identifier),
+      optional($.ns_macro),
+      optional(seq('=', field('value', $._expression))),
     ),
 
   }
