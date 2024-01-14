@@ -591,11 +591,23 @@ module.exports = grammar(C, {
       'NS_REFINED_FOR_SWIFT',
       'NS_SWIFT_SENDABLE',
       seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
-      seq('NS_SWIFT_ASYNC_NAME', $.argument_list),
+      seq('NS_SWIFT_ASYNC_NAME', $._ns_macro_paren),
       seq('API_AVAILABLE', $.argument_list),
       seq('API_DEPRECATED', $.argument_list),
       seq('API_DEPRECATED_WITH_REPLACEMENT', $.argument_list),
     )),
+
+    _ns_macro_paren: $ => seq(
+      '(',
+      repeat(
+        choice(
+          $.string_literal,
+          /[^()]+/,
+          $._ns_macro_paren
+        )
+      ),
+      ')'
+    ),
 
     ns_options: $ => seq(
       'typedef',

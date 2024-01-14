@@ -3404,6 +3404,10 @@
         {
           "type": "argument_list",
           "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
         }
       ]
     }

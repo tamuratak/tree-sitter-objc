@@ -186,7 +186,7 @@ Method declaration: keyword selector 3
 ================================================================================
 
 @interface ClassName
-- (instancetype)k API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0)) NS_SWIFT_UNAVAILABLE("Use initializer instead");
+- (instancetype)k API_AVAILABLE(macos(10.13), ios(11.0), watchos(4.0), tvos(11.0)) NS_SWIFT_UNAVAILABLE("Use initializer instead") NS_SWIFT_ASYNC_NAME(urlSession(_:needNewBodyStreamForTask:));
 @end
 
 --------------------------------------------------------------------------------
