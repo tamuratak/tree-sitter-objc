@@ -168,7 +168,7 @@ module.exports = grammar(C, {
     property_declaration: $ => seq(
       '@property',
       optional($._property_attribute_list),
-      field('type', $._type_identifier),
+      field('type', $.type_descriptor),
       optional('*'),
       field('name', $.identifier),
       optional($.ns_macro),
@@ -600,6 +600,7 @@ module.exports = grammar(C, {
       'NS_REFINED_FOR_SWIFT',
       'NS_SWIFT_SENDABLE',
       'NS_UNAVAILABLE',
+      seq('NS_FORMAT_FUNCTION', $.argument_list),
       seq('NS_SWIFT_ASYNC_NAME', $._ns_macro_paren),
       seq('NS_SWIFT_NAME', $._ns_macro_paren),
       seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
@@ -630,7 +631,7 @@ module.exports = grammar(C, {
     ),
 
     ns_enum: $ => seq(
-      'typedef',
+      optional('typedef'),
       'NS_ENUM', $.argument_list,
       field('body', $.ns_macro_enumerator_list),
       optional($.ns_macro),

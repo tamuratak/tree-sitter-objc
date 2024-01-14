@@ -119,6 +119,8 @@ Class interface: Property
 
 @interface ClassName
 @property (readwrite, copy) float value;
+@property (readwrite) _Bool b;
+@property (readwrite, copy) long long longValue;
 @end
 
 --------------------------------------------------------------------------------
@@ -129,7 +131,18 @@ Class interface: Property
     (property_declaration
       (readwrite)
       (copy)
-      type: (type_identifier)
+      type: (type_descriptor
+        type: (primitive_type))
+      name: (identifier))
+    (property_declaration
+      (readwrite)
+      type: (type_descriptor)
+      name: (identifier))
+    (property_declaration
+      (readwrite)
+      (copy)
+      type: (type_descriptor
+        type: (sized_type_specifier))
       name: (identifier))))
 
 ================================================================================

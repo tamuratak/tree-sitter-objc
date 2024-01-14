@@ -9108,20 +9108,8 @@
           "name": "type",
           "content": {
             "type": "SYMBOL",
-            "name": "_type_identifier"
+            "name": "type_descriptor"
           }
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "*"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
         },
         {
           "type": "FIELD",
@@ -10753,6 +10741,19 @@
             "members": [
               {
                 "type": "STRING",
+                "value": "NS_FORMAT_FUNCTION"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "argument_list"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
                 "value": "NS_SWIFT_ASYNC_NAME"
               },
               {
@@ -10920,8 +10921,16 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "typedef"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "typedef"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "STRING",

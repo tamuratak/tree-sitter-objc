@@ -4434,23 +4434,7 @@
         "required": true,
         "types": [
           {
-            "type": "_Bool",
-            "named": false
-          },
-          {
-            "type": "_Complex",
-            "named": false
-          },
-          {
-            "type": "_Imaginary",
-            "named": false
-          },
-          {
-            "type": "protocol_type_specifier",
-            "named": true
-          },
-          {
-            "type": "type_identifier",
+            "type": "type_descriptor",
             "named": true
           }
         ]
@@ -5728,6 +5712,10 @@
     "named": false
   },
   {
+    "type": "NS_FORMAT_FUNCTION",
+    "named": false
+  },
+  {
     "type": "NS_NOESCAPE",
     "named": false
   },
@@ -6061,11 +6049,11 @@
   },
   {
     "type": "false",
-    "named": true
+    "named": false
   },
   {
     "type": "false",
-    "named": false
+    "named": true
   },
   {
     "type": "field_identifier",
