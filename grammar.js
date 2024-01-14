@@ -60,6 +60,7 @@ module.exports = grammar(C, {
     // Declarations
 
     class_interface: $ => seq(
+      optional($.ns_macro),
       '@interface', $._name, optional($._protocols),
       optional(seq($._superclass_reference, optional($._protocols))),
       optional($._instance_variables),
@@ -229,9 +230,11 @@ module.exports = grammar(C, {
       alias($.block_parenthesized_type_declarator, $.block_parenthesized_declarator),
     ),
 
+    _block_qualifiers: _ => repeat1(choice('NS_NOESCAPE', 'NS_SWIFT_SENDABLE')),
+
     block_parenthesized_type_declarator: $ => prec.dynamic(C.PREC.PAREN_DECLARATOR, seq(
       '(',
-      optional('NS_NOESCAPE'),
+      optional($._block_qualifiers),
       '^',
       field('declarator', $._declarator),
       ')',
@@ -239,7 +242,7 @@ module.exports = grammar(C, {
 
     block_abstract_parenthesized_declarator: $ => prec(1, seq(
       '(',
-      optional('NS_NOESCAPE'),
+      optional($._block_qualifiers),
       '^',
       $._abstract_declarator,
       ')',
@@ -247,7 +250,7 @@ module.exports = grammar(C, {
 
     block_declarator: $ => seq(
       '(',
-      optional('NS_NOESCAPE'),
+      optional($._block_qualifiers),
       '^',
       field('declarator', optional($.identifier)),
       ')',
@@ -257,7 +260,7 @@ module.exports = grammar(C, {
 
     abstract_block_declarator: $ => seq(
       '(',
-      optional('NS_NOESCAPE'),
+      optional($._block_qualifiers),
       '^',
       field('declarator', optional($._abstract_declarator)),
       ')',
@@ -586,7 +589,9 @@ module.exports = grammar(C, {
       'NS_DESIGNATED_INITIALIZER',
       'NS_REQUIRES_NIL_TERMINATION',
       'NS_REFINED_FOR_SWIFT',
+      'NS_SWIFT_SENDABLE',
       seq('NS_SWIFT_UNAVAILABLE', $.argument_list),
+      seq('NS_SWIFT_ASYNC_NAME', $.argument_list),
       seq('API_AVAILABLE', $.argument_list),
       seq('API_DEPRECATED', $.argument_list),
       seq('API_DEPRECATED_WITH_REPLACEMENT', $.argument_list),

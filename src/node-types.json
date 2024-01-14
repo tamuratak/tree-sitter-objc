@@ -1541,6 +1541,10 @@
           "named": true
         },
         {
+          "type": "ns_macro",
+          "named": true
+        },
+        {
           "type": "preproc_call",
           "named": true
         },
@@ -5633,6 +5637,14 @@
   },
   {
     "type": "NS_REQUIRES_NIL_TERMINATION",
+    "named": false
+  },
+  {
+    "type": "NS_SWIFT_ASYNC_NAME",
+    "named": false
+  },
+  {
+    "type": "NS_SWIFT_SENDABLE",
     "named": false
   },
   {

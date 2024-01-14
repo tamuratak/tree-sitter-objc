@@ -12,6 +12,39 @@ Class interface: Empty
     name: (identifier)))
 
 ================================================================================
+Class interface: with macro
+================================================================================
+
+NS_SWIFT_SENDABLE
+API_AVAILABLE(macosx(10.12), ios(10.0), watchos(3.0), tvos(10.0))
+@interface ClassName
+@end
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (class_interface
+    (ns_macro
+      (argument_list
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))
+        (call_expression
+          function: (identifier)
+          arguments: (argument_list
+            (number_literal)))))
+    name: (identifier)))
+
+================================================================================
 Class interface: Superclass
 ================================================================================
 

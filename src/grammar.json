@@ -8430,6 +8430,18 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ns_macro"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "STRING",
           "value": "@interface"
         },
@@ -9286,6 +9298,22 @@
       "type": "STRING",
       "value": "nullable"
     },
+    "_block_qualifiers": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "NS_NOESCAPE"
+          },
+          {
+            "type": "STRING",
+            "value": "NS_SWIFT_SENDABLE"
+          }
+        ]
+      }
+    },
     "block_parenthesized_type_declarator": {
       "type": "PREC_DYNAMIC",
       "value": -10,
@@ -9300,8 +9328,8 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "STRING",
-                "value": "NS_NOESCAPE"
+                "type": "SYMBOL",
+                "name": "_block_qualifiers"
               },
               {
                 "type": "BLANK"
@@ -9341,8 +9369,8 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "STRING",
-                "value": "NS_NOESCAPE"
+                "type": "SYMBOL",
+                "name": "_block_qualifiers"
               },
               {
                 "type": "BLANK"
@@ -9375,8 +9403,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "STRING",
-              "value": "NS_NOESCAPE"
+              "type": "SYMBOL",
+              "name": "_block_qualifiers"
             },
             {
               "type": "BLANK"
@@ -9435,8 +9463,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "STRING",
-              "value": "NS_NOESCAPE"
+              "type": "SYMBOL",
+              "name": "_block_qualifiers"
             },
             {
               "type": "BLANK"
@@ -10689,11 +10717,28 @@
             "value": "NS_REFINED_FOR_SWIFT"
           },
           {
+            "type": "STRING",
+            "value": "NS_SWIFT_SENDABLE"
+          },
+          {
             "type": "SEQ",
             "members": [
               {
                 "type": "STRING",
                 "value": "NS_SWIFT_UNAVAILABLE"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "argument_list"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "NS_SWIFT_ASYNC_NAME"
               },
               {
                 "type": "SYMBOL",
