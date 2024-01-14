@@ -2075,16 +2075,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "ns_macro",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -3398,7 +3388,7 @@
         "required": true,
         "types": [
           {
-            "type": "enumerator_list",
+            "type": "ns_macro_enumerator_list",
             "named": true
           }
         ]
@@ -3439,6 +3429,61 @@
     }
   },
   {
+    "type": "ns_macro_enumerator",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "ns_macro",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ns_macro_enumerator_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "ns_macro_enumerator",
+          "named": true
+        },
+        {
+          "type": "preproc_call",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "ns_options",
     "named": true,
     "fields": {
@@ -3447,7 +3492,7 @@
         "required": true,
         "types": [
           {
-            "type": "enumerator_list",
+            "type": "ns_macro_enumerator_list",
             "named": true
           }
         ]
@@ -6016,11 +6061,11 @@
   },
   {
     "type": "false",
-    "named": false
+    "named": true
   },
   {
     "type": "false",
-    "named": true
+    "named": false
   },
   {
     "type": "field_identifier",

@@ -618,25 +618,127 @@ typedef NS_OPTIONS(NSUInteger, NSBinarySearchingOptions) {
         (argument_list
           (identifier)
           (identifier))
-        body: (enumerator_list
-          (enumerator
+        body: (ns_macro_enumerator_list
+          (ns_macro_enumerator
             name: (identifier)
             value: (parenthesized_expression
               (binary_expression
                 left: (number_literal)
                 right: (number_literal))))
-          (enumerator
+          (ns_macro_enumerator
             name: (identifier)
             value: (parenthesized_expression
               (binary_expression
                 left: (number_literal)
                 right: (number_literal))))
-          (enumerator
+          (ns_macro_enumerator
             name: (identifier)
             value: (parenthesized_expression
               (binary_expression
                 left: (number_literal)
                 right: (number_literal)))))))))
+
+================================================================================
+typedef with API_AVAILABLE
+================================================================================
+
+typedef NS_OPTIONS(NSUInteger, NSBinarySearchingOptions) {
+	NSBinarySearchingFirstEqual API_AVAILABLE(macos(10.9), ios(7.0), watchos(2.0), tvos(9.0)) = (1UL << 8),
+	NSBinarySearchingLastEqual = (1UL << 9),
+	NSBinarySearchingInsertionIndex = (1UL << 10),
+};
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (type_definition
+    (ns_options
+      (argument_list
+        (identifier)
+        (identifier))
+      body: (ns_macro_enumerator_list
+        (ns_macro_enumerator
+          name: (identifier)
+          (ns_macro
+            (argument_list
+              (call_expression
+                function: (identifier)
+                arguments: (argument_list
+                  (number_literal)))
+              (call_expression
+                function: (identifier)
+                arguments: (argument_list
+                  (number_literal)))
+              (call_expression
+                function: (identifier)
+                arguments: (argument_list
+                  (number_literal)))
+              (call_expression
+                function: (identifier)
+                arguments: (argument_list
+                  (number_literal)))))
+          value: (parenthesized_expression
+            (binary_expression
+              left: (number_literal)
+              right: (number_literal))))
+        (ns_macro_enumerator
+          name: (identifier)
+          value: (parenthesized_expression
+            (binary_expression
+              left: (number_literal)
+              right: (number_literal))))
+        (ns_macro_enumerator
+          name: (identifier)
+          value: (parenthesized_expression
+            (binary_expression
+              left: (number_literal)
+              right: (number_literal))))))))
+
+================================================================================
+typedef with #if
+================================================================================
+
+typedef NS_OPTIONS(NSUInteger, NSBinarySearchingOptions) {
+	NSBinarySearchingFirstEqual = (1UL << 8),
+	NSBinarySearchingLastEqual = (1UL << 9),
+#if !0
+	NSBinarySearchingInsertionIndex = (1UL << 10),
+#end
+};
+
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (type_definition
+    (ns_options
+      (argument_list
+        (identifier)
+        (identifier))
+      body: (ns_macro_enumerator_list
+        (ns_macro_enumerator
+          name: (identifier)
+          value: (parenthesized_expression
+            (binary_expression
+              left: (number_literal)
+              right: (number_literal))))
+        (ns_macro_enumerator
+          name: (identifier)
+          value: (parenthesized_expression
+            (binary_expression
+              left: (number_literal)
+              right: (number_literal))))
+        (preproc_call
+          directive: (preproc_directive)
+          argument: (preproc_arg))
+        (ns_macro_enumerator
+          name: (identifier)
+          value: (parenthesized_expression
+            (binary_expression
+              left: (number_literal)
+              right: (number_literal))))
+        (preproc_call
+          directive: (preproc_directive))))))
 
 ================================================================================
 typedef function pointer

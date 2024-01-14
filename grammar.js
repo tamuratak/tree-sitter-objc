@@ -624,7 +624,7 @@ module.exports = grammar(C, {
     ns_options: $ => seq(
       'typedef',
       'NS_OPTIONS', $.argument_list,
-      field('body', $.enumerator_list),
+      field('body', $.ns_macro_enumerator_list),
       optional($.ns_macro),
       ';'
     ),
@@ -632,9 +632,24 @@ module.exports = grammar(C, {
     ns_enum: $ => seq(
       'typedef',
       'NS_ENUM', $.argument_list,
-      field('body', $.enumerator_list),
+      field('body', $.ns_macro_enumerator_list),
       optional($.ns_macro),
       ';'
+    ),
+
+    ns_macro_enumerator_list: $ => seq(
+      '{',
+      repeat(choice(
+        seq($.ns_macro_enumerator, optional(',')),
+        $.preproc_call
+      )),
+      '}',
+    ),
+
+    ns_macro_enumerator: $ => seq(
+        field('name', $.identifier),
+        optional($.ns_macro),
+        optional(seq('=', field('value', $._expression))),
     ),
 
     type_definition: ($, original) => choice(
@@ -649,12 +664,6 @@ module.exports = grammar(C, {
       $._declaration_declarator,
       optional($.ns_macro),
       ';',
-    ),
-
-    enumerator: $ => seq(
-      field('name', $.identifier),
-      optional($.ns_macro),
-      optional(seq('=', field('value', $._expression))),
     ),
 
   }
